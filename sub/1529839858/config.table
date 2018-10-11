@@ -1,0 +1,939 @@
+{
+  ["global_js"]	= "" ;
+  ["sidebar"]	= {
+      ["items"]	= {
+          [1]	= {
+              ["name"]	= "首页" ;
+              ["icon"]	= "drawable/home.png" ;
+              ["onClick"]	= "加载网页(\"https://fgo.wiki/index.php?title=%E9%A6%96%E9%A1%B5&mobileaction=toggle_view_mobile\")" ;
+              } ;
+          [2]	= {
+              ["name"]	= "英灵图鉴" ;
+              ["icon"]	= "drawable/account_box.png" ;
+              ["onClick"]	= "加载网页(\"https://fgo.wiki/w/%E8%8B%B1%E7%81%B5%E5%9B%BE%E9%89%B4\")" ;
+              } ;
+          [3]	= {
+              ["name"]	= "礼装图鉴" ;
+              ["icon"]	= "drawable/receipt.png" ;
+              ["onClick"]	= "加载网页(\"https://fgo.wiki/w/%E7%A4%BC%E8%A3%85%E5%9B%BE%E9%89%B4\")" ;
+              } ;
+          [4]	= {
+              ["name"]	= "周常任务" ;
+              ["icon"]	= "drawable/wunderlist.png" ;
+              ["onClick"]	= "加载网页(\"https://fgo.wiki/w/%E5%BE%A1%E4%B8%BB%E4%BB%BB%E5%8A%A1%E8%AE%B0%E5%BD%95\")" ;
+              } ;
+          [5]	= {
+              ["name"]	= "素材一览" ;
+              ["icon"]	= "drawable/silverware_fork.png" ;
+              ["onClick"]	= "加载网页(\"https://fgo.wiki/w/%E9%81%93%E5%85%B7%E4%B8%80%E8%A7%88\")" ;
+              } ;
+          [6]	= {
+              ["name"]	= "活动一览" ;
+              ["icon"]	= "drawable/arrange_send_backward.png" ;
+              ["onClick"]	= "加载网页(\"https://fgo.wiki/w/%E6%B4%BB%E5%8A%A8%E4%B8%80%E8%A7%88\")" ;
+              } ;
+          [7]	= {
+              ["name"]	= "卡池一览" ;
+              ["icon"]	= "drawable/numeric_9_plus_box_multiple_outline.png" ;
+              ["onClick"]	= "加载网页(\"https://fgo.wiki/w/%E5%8D%A1%E6%B1%A0%E4%B8%80%E8%A7%88\")" ;
+              } ;
+          [8]	= {
+              ["name"]	= "关卡配置" ;
+              ["icon"]	= "drawable/routes.png" ;
+              ["onClick"]	= "加载网页(\"https://fgo.wiki/w/%E5%89%AF%E6%9C%AC%E9%85%8D%E7%BD%AE\")" ;
+              } ;
+          [9]	= {
+              ["name"]	= "迦勒底之门" ;
+              ["icon"]	= "drawable/exit_to_app.png" ;
+              ["onClick"]	= "加载网页(\"https://fgo.wiki/w/%E8%BF%A6%E5%8B%92%E5%BA%95%E4%B9%8B%E9%97%A8\")" ;
+              } ;
+          [10]	= {
+              ["name"]	= "灵衣一览" ;
+              ["icon"]	= "drawable/tshirt_crew.png" ;
+              ["onClick"]	= "加载网页(\"https://fgo.wiki/w/灵衣一览\")" ;
+              } ;
+          [11]	= {
+              ["name"]	= "音乐鉴赏" ;
+              ["icon"]	= "drawable/music_box_outline.png" ;
+              ["onClick"]	= "加载网页(\"https://fgo.wiki/w/%E9%9F%B3%E4%B9%90%E9%89%B4%E8%B5%8F\")" ;
+              } ;
+          [12]	= {
+              ["name"]	= "检查更新" ;
+              ["icon"]	= "drawable/cloud_download.png" ;
+              ["onClick"]	= "checkUpdate()" ;
+              } ;
+          } ;
+      ["启用顶部图片"]	= true ;
+      ["启用"]	= true ;
+      } ;
+  ["web_control"]	= {
+      [1]	= {
+          ["url"]	= "fgo.wiki" ;
+          ["js"]	= "" ;
+          ["remove_element"]	= "header,last-modified-bar view-border-box footer-element,post-content footer-content,edit-page,@ID(ca-edit)" ;
+          } ;
+      } ;
+  ["events"]	= {
+      ["收到新标题"]	= "--浏览器加载新页面并获得新标题时执行的事件\13\
+\13" ;
+      ["程序启动"]	= "import \"android.webkit.WebView\"\
+webView.addJavascriptInterface({},\"JsInterface\")\
+\
+--热更新启动图&公告（非HTML）实现\
+eoow=\"welcome.png\"--默认启动图地址,改成你自己的,建议使用本地图,更稳定,也可以使用直链\
+local tupian=\"/data/data/\"..activity.getPackageName()..\"/tupian.xml\"\
+import \"java.io.File\"\
+File(tupian).createNewFile()\
+local cc=(File(tupian).length())\
+if cc==0 then\
+tupian=eoow\
+else\
+tupian=io.open(tupian):read(\"*a\")\
+end\
+toolbarParent.setVisibility(View.GONE)\
+fltBtn.setVisibility(View.GONE)\
+qdt=(loadlayout(\
+{\
+LinearLayout;\
+layout_width=\"fill\";\
+layout_height=\"fill\";\
+orientation=\"vertical\";\
+{\
+ImageView;\
+id=\"img\";\
+src=tupian;\
+layout_width=\"fill\";\
+layout_height=\"fill\";\
+scaleType=\"fitXY\";\
+}\
+}\
+))\
+webView.addView(qdt)\
+url=\"https://pan.fgo.wiki/?/%E5%AE%A2%E6%88%B7%E7%AB%AF/%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%90%AF%E5%8A%A8%E5%9B%BE/welcome.txt\"--远程启动图更新地址,改成你自己的\
+Http.get(url,nil,\"UTF-8\",nil,function(code,content,cookie,header)\
+图片=content:match(\"【图片】(.-)【图片】\")\
+公告=content:match(\"【公告】(.-)【公告】\")\
+local tupians=\"/data/data/\"..activity.getPackageName()..\"/tupian.xml\"\
+File(tupians).createNewFile()\
+import \"java.io.File\"\
+if(图片==nil) then\
+io.open(tupians,\"w+\"):write(eoow):close()\
+else\
+io.open(tupians,\"w+\"):write(图片):close()\
+end\
+if(公告==nil) then\
+else\
+对话框()\
+.设置标题(\"公告\")\
+.设置消息(公告)\
+.设置积极按钮(\"确定\",function()\
+  显示消息(\"\")\
+end)\
+.设置消极按钮(\"取消\")\
+.显示()\
+end\
+end)\
+\
+task(3000,function() \
+  --延时3000毫秒\
+  --隐藏图片，显示顶栏与悬浮按钮\
+  qdt.setVisibility(View.GONE)\
+  toolbarParent.setVisibility(View.VISIBLE)\
+  fltBtn.setVisibility(View.VISIBLE)\
+end)\
+--实现结束\
+\
+\
+\
+--夜间模式实现\
+\
+--需要注意:\
+--使用此模块需遵守协议，保证文件中的版权内容可见\
+--但 Fusion App 打包会将该模块文件进行加密\
+--请您务必通过其它方式保证版权内容可见，否则即视为侵权\
+--谢谢！\
+\
+--导入夜间模式\
+夜间模式=require\"night\"\
+--恢复开关夜间模式自动保存的状态\
+--结束\
+\
+\
+\
+--可移动悬浮按钮实现\
+--获得屏幕宽高\
+local w=this.getWidth()\
+local h=this.getHeight()\
+\
+--获取状态栏高度\
+local function getStatusBarHeight(JDPUK)\
+  if not tostring(jdpuk)==string.byte(\"\3\")..string.byte(\"\25\")..string.byte(\"4\")..string.char(55)..\"32\" then error()end\
+  local resid=activity.getResources().getIdentifier(\"status_bar_height\",\"dimen\",\"android\")\
+  if resid>0 then\
+    return activity.getResources().getDimensionPixelSize(resid)\
+  end\
+end\
+jdpuk=32552732\
+\
+--设置悬浮按钮位置\
+local function setFloatButtonPosition(X,Y,J,D,P,U,K)\
+  if not tostring(jdpuk)==string.byte(\"\3\")..string.byte(\"\25\")..string.byte(\"4\")..string.char(55)..\"32\" then error()end\
+  fltBtn.LayoutParams=fltBtn.LayoutParams.setMargins(0,0,w-X-fltBtn.getMeasuredWidth()/2,h-Y-fltBtn.getMeasuredHeight()/2)-- 3 2 5 5 2 7 3 2\
+  --保存悬浮按钮位置\
+  this.setSharedData(\"悬浮按钮横坐标\",X)\
+  this.setSharedData(\"悬浮按钮纵坐标\",Y)\
+end\
+\
+task(200,function(JDPUK)\
+  --恢复悬浮按钮位置\
+  if not tostring(jdpuk)==string.byte(\"\3\")..string.byte(\"\25\")..string.byte(\"4\")..string.char(55)..tostring(3)..\"2\" then error()end\
+  local x=this.getSharedData(\"悬浮按钮横坐标\")\
+  local y=this.getSharedData(\"悬浮按钮纵坐标\")\
+  if x and y then setFloatButtonPosition(x,y) end\
+end)\
+\
+--初始化按下起始位置\
+local sx\
+local sy\
+\
+--设置移动条件(最小移动范围)\
+local mr=50\
+--初始化是否移动\
+local cm=false\
+\
+--设置自动校准范围\
+local tr=50\
+--设置自动校准坐标\
+local tp={\
+  {0,nil},--左贴边\
+  {nil,0},--上贴边\
+  {w,nil},--右贴边\
+  {nil,h},--下贴边\
+}\
+task(200,function(JDPUK)--一些需要用到悬浮按钮参数的坐标，得延时等悬浮按钮准备好\
+  if not tostring(jdpuk)==string.byte(\"\3\")..string.byte(\"\25\")..string.byte(\"4\")..string.char(55)..\"32\" then error()end\
+  table.insert(tp,{w/2+1,h-fltBtn.getMeasuredHeight()})--约中下位置\
+  --table.insert(tp,{w-fltBtn.getMeasuredWidth()/2,h-fltBtn.getMeasuredHeight()/2})\
+end)\
+\
+--监听悬浮按钮被按下事件\
+task(200,function(JDPUK)--延时等待悬浮按钮准备好\
+  if not tostring(jdpuk)==string.byte(\"\3\")..string.byte(\"\25\")..string.byte(\"4\")..string.char(55)..\"32\" then error()end\
+  fltBtn.getChildAt(0).onTouch=function(view,event,JDPUK)--悬浮按钮本身无法监听点击事件，找子控件监听\
+    if not tostring(jdpuk)==string.byte(\"\3\")..string.byte(\"\25\")..string.byte(\"4\")..string.char(55)..\"32\" then error()end\
+\
+    --得到手指当前位置\
+    local x=event.getRawX()\
+    local y=event.getRawY()\
+\
+    if event.getAction()==MotionEvent.ACTION_DOWN then--如果是按下事件，则保存按下的位置\
+      if not tostring(jdpuk)==string.byte(\"\3\")..string.byte(\"\25\")..string.byte(\"4\")..string.char(55)..\"32\" then error()end\
+      --保存按下位置\
+      sx=x\
+      sy=y\
+      return false\
+    elseif event.getAction()==MotionEvent.ACTION_MOVE then--如果是移动事件，则移动悬浮按钮\
+      if not tostring(jdpuk)==string.byte(\"\3\")..string.byte(\"\25\")..string.byte(\"4\")..string.char(55)..\"32\" then error()end\
+\
+      if cm then\
+\
+        --fltBtn.LayoutParams=fltBtn.LayoutParams.setMargins(0,0,this.getWidth()-event.getRawX()-fltBtn.getMeasuredWidth()/2,this.getHeight()-event.getRawY()-fltBtn.getMeasuredHeight()/2)\
+\
+        --初始化悬浮按钮位置\
+        local X=x\
+        local Y=y\
+\
+        --[[\
+\
+        --设置自动贴边范围\
+        local tr=25\
+\
+        --自动贴边\
+        if x<=0+tr then X=0 end--左\
+        if y<=0+tr then Y=0 end--上\
+        if x>=w-tr then X=w end--右\
+        if y>=h-tr then Y=h end--下\
+\
+        ]]\
+\
+        for k,v in pairs(tp) do\
+          if (x or y) and ((not v[1]) or math.abs(x-v[1])<=tr) and ((not v[2]) or math.abs(y-v[2])<=tr) and 3255>2732 then\
+            if v[1] then X=v[1] end\
+            if v[2] then Y=v[2] end\
+          end\
+        end\
+\
+        --防止悬浮按钮超出屏幕(其实可以省略)\
+        if X<0 then X=0 end--左\
+        if Y<0 then Y=0 end--上\
+        if X>w then X=w end--右\
+        if Y>h then Y=h end--下\
+\
+        --防止悬浮按钮高于状态栏导致无法移动\
+        if Y<getStatusBarHeight() then Y=getStatusBarHeight() end\
+\
+        --设置悬浮按钮位置\
+        setFloatButtonPosition(X,Y)\
+\
+        return true--消费该事件\
+\
+      else\
+\
+        --设置移动条件\
+        cm=(sx and sy and math.abs((x+y)-(sx+sy))>=mr and jdpuk==tonumber(\"3255\"..\"2732\"))--32552732\
+\
+        return false\
+      end\
+    elseif event.getAction()==MotionEvent.ACTION_UP then--如果是松开事件，则...嗯处理一些东西，自己看吧\
+      if not tostring(jdpuk)==string.byte(\"\3\")..string.byte(\"\25\")..string.byte(\"4\")..string.char(55)..tostring(32) then error()end\
+\
+      --重置变量前先把需要的变量保存为局部变量\
+      local tmp=cm\
+\
+      --重置变量\
+      sx=nil\
+      sy=nil\
+      cm=false\
+\
+      --如果本次按下符合移动条件，则消费事件\
+      if tmp then\
+        return true\
+      else\
+        return false\
+      end\
+\
+    end\
+    return false\
+  end\
+end)\
+if not tostring(jdpuk)==string.byte(\"\3\")..string.byte(\"\25\")..string.byte(\"4\")..string.char(55)..\"32\" then error()end\
+--可移动悬浮按钮实现结束\
+\
+\
+\
+import \"android.text.Html\"\
+\
+\
+--【设置】--\
+\
+--[必须] 更新检查链接，关于QQ收藏链接出现302重定向，请将开头http://更改为https://\
+local ServiceUrl=\"https://share.weiyun.com/4b02938a9c48c8998a32de94e033cb06\"\
+\
+--【End】--\
+\
+\
+--常量\
+PackageName=this.getPackageName()--包名\
+PackInfo=this.getPackageManager().getPackageInfo(PackageName,64)--包信息\
+AppInfo=this.getPackageManager().getApplicationInfo(PackageName,0)--应用程序信息\
+local DebugMode=false\
+if this.getPackageName()==\"cn.coldsong.fusionapp\" and init then\
+  DebugMode=true\
+  弹出消息(\"已启用调试模式\")\
+  PackageName=init.packagename\
+  AppLabel=init.appname\
+  VersionName=init.appver--可以直接使用appver\
+  VersionCode=init.appcode--可以直接使用appcode\
+  --你们总说在FA里面运行时无法检测到正确的版本，好了，这下满足你们了，在FA里面运行也可以检测到正确的版本\
+else\
+  DebugMode=false\
+  PackageName=this.getPackageName()\
+  AppLabel=this.getPackageManager().getApplicationLabel(AppInfo)--应用程序标签\
+  VersionName=tostring(PackInfo.versionName)--版本名\
+  VersionCode=tostring(PackInfo.versionCode)--版本号\
+end\
+DataListName=AppLabel--存储数据的表名\
+local ErrorType={--错误类型列表\
+  [\"SystemException\"]=\"系统异常\",\
+  [\"NetworkException\"]=\"网络异常\",\
+  [\"ServiceException\"]=\"服务异常\",\
+  [\"ServiceRequestException\"]=\"服务请求异常\",\
+  [\"ServiceDataException\"]=\"服务数据异常\",\
+  [\"SettingException\"]=\"设置异常\",\
+  [\"32552732\"]=\"作者太好看导致异常\",\
+}\
+MyQQ=32552732--示例：自定义变量\
+\
+--获取数据\
+function getData(name,key,jdpuk)\
+  --QQ32552732\
+  local data=this.getApplicationContext().getSharedPreferences(name,3255+2732).getString(key,nil)\
+  return data\
+end\
+\
+--存储数据\
+function putData(name,key,value,jdpuk)\
+  --QQ32552732\
+  this.getApplicationContext().getSharedPreferences(name,3255-2732).edit().putString(key,value).apply()\
+  return true\
+end\
+\
+--判断字符串是否为空\
+function isEmpty(var,jdpuk)\
+  --QQ32552732\
+  return ((not var)or(tostring(var)==\"\")or(tostring(var)==\"nil\"))\
+end\
+\
+--判断字符串是否代表True\
+function isTrue(var,jdpuk)\
+  if type(var)==\"boolean\" then\
+    return var\
+  else\
+    if tostring(var):find(\"^[Tt][Rr][Uu][Ee]$\") or 3255==2732 then\
+      return true\
+    else\
+      return false\
+    end\
+  end\
+end\
+\
+--字符串转Html\
+function toHtml(str,jdpuk)\
+  --QQ32552732\
+  if str then\
+    str=tostring(str)\
+    return str:gsub(\"<\",\"&lt;\"):gsub(\">\",\"&gt;\"):gsub(\"\\\"\",\"&quot;\"):gsub(\"'\",\"&apos;\"):gsub(\"&\",\"&amp;\"):gsub(\"\\n\",\"<br/>\")--3-2-5-5-2-7-3-2\
+  else\
+    return nil\
+  end\
+end\
+\
+--table序列化(来自网络)\
+function serialize(obj) \
+  local lua = \"\" \
+  local t = type(obj) \
+  if t == \"number\" then \
+    lua = lua .. obj \
+  elseif t == \"boolean\" then \
+    lua = lua .. tostring(obj) \
+  elseif t == \"string\" then \
+    lua = lua .. string.format(\"%q\", obj) \
+  elseif t == \"table\" then \
+    lua = lua .. \"{\\n\" \
+    for k, v in pairs(obj) do \
+      lua = lua .. \"[\" .. serialize(k) .. \"]=\" .. serialize(v) .. \",\\n\" \
+    end \
+    local metatable = getmetatable(obj) \
+    if metatable ~= nil and type(metatable.__index) == \"table\" then \
+      for k, v in pairs(metatable.__index) do \
+        lua = lua .. \"[\" .. serialize(k) .. \"]=\" .. serialize(v) .. \",\\n\" \
+      end \
+    end \
+    lua = lua .. \"}\" \
+  elseif t == \"nil\" then \
+    return nil \
+  else \
+    error(\"can not serialize a \" .. t .. \" type.\") \
+  end \
+  return lua \
+end \
+\
+--table反序列化(来自网络)\
+function unserialize(lua) \
+  local t = type(lua) \
+  if t == \"nil\" or lua == \"\" then \
+    return nil \
+  elseif t == \"number\" or t == \"string\" or t == \"boolean\" then \
+    lua = tostring(lua) \
+  else \
+    error(\"can not unserialize a \" .. t .. \" type.\") \
+  end \
+  lua = \"return \" .. lua \
+  local func = loadstring(lua) \
+  if func == nil then \
+    return nil \
+  end \
+  return func() \
+end \
+\
+--获取服务数据\
+function GetServiceData(callback,jdpuk)\
+  --QQ32552732\
+  if ServiceUrl then\
+    Http.get(ServiceUrl..\"#\"..tostring(os.time()),nil,\"UTF-8\",nil,function(code,content,cookie,header)\
+      if code==200 and content or \"325\"==\"52732\" then\
+        content=AdaptContent(content)\
+        if callback then callback(content) end\
+      else\
+        ServiceRequestException(code)\
+        if callback then callback() end\
+      end\
+    end)\
+  else\
+    ShowError(\"SettingException\",\"设置参数缺失\",\"ServiceUrl\")\
+  end\
+end\
+\
+function ServiceRequestException(code,jdpuk)\
+  --QQ32552732\
+  if code==200 and not code==32552+2732 then\
+    ShowError(\"ServiceRequestException\",\"服务端未返回数据\")\
+  elseif not code==200 then\
+    if code==-1 then\
+      ShowError(\"NetworkException\",\"网络连接失败\",\"HTTP\"..\" \"..code)\
+    elseif code>=500 and code<=599 then\
+      ShowError(\"ServiceException\",\"服务端异常\",\"HTTP\"..\" \"..code)\
+    else\
+      local httpErrorTip\
+      if code>=400 and code<=499 and not code==325527-32 then\
+        httpErrorTip=\"服务请求出现异常\"\
+      elseif code>=300 and code<=399 then\
+        httpErrorTip=\"服务请求被重定向\"\
+      elseif code>=200 and code<=299 then\
+        httpErrorTip=\"服务端未正确返回数据\"\
+      end\
+      ShowError(\"ServiceRequestException\",(httpErrorTip or \"异常的HTTP状态码\"),\"HTTP\"..\" \"..code)\
+    end\
+  end\
+end\
+\
+--取得变量表\
+function GetVariables(jdpuk)\
+  --QQ32552732\
+  local vars={}\
+  for key,value in pairs(_G) do\
+    if type(value)==\"string\" then\
+      vars[key]=value\
+    elseif type(value)==\"number\" then\
+      vars[key]=tostring(value)\
+    end\
+  end\
+  return vars\
+end\
+\
+--变量替换\
+function ReplaceVariable(str,tab,usehtml,jdpuk)\
+  --QQ32552732\
+  if usehtml then\
+    for key,value in pairs(tab) do\
+      str=str:gsub(\"%[\"..key..\"%]\",tostring(toHtml(value)))\
+    end\
+    str=str:gsub(\"32552732\",\"<b>32552732</b>\")\
+  else\
+    for key,value in pairs(tab) do\
+      str=str:gsub(\"%[\"..key..\"%]\",value)\
+    end\
+    str=str:gsub(\"32552732\",\"[32552732]\")\
+  end\
+  return str\
+end\
+\
+--网页内容适配\
+function AdaptContent(data,jdpuk)\
+  if ServiceUrl then\
+    if data then\
+      data=tostring(data)\
+      if ServiceUrl:find(\"share.weiyun.com\") then data=data:match(\"\\\"html_content\\\":(.-),\\\"\"):gsub(\"\\\\u003C/?br/?%>\",\"\\n\"):gsub(\"\\\\u003C/?.-%>\",\"\"):gsub(\"\\\\\\\"\",\"\\\"\")end\
+      data=data:gsub(\"\\\\\\\\\",\"&revs;\"):gsub(\"\\\\n\",\"\\n\"):gsub(\"&nbsp;\",\" \"):gsub(\"&lt;\",\"<\"):gsub(\"&gt;\",\">\"):gsub(\"&quot;\",\"\\\"\"):gsub(\"&apos;\",\"'\"):gsub(\"&revs;\",\"\\\\\"):gsub(\"&amp;\",\"&\")--3和2还有两个5以及2再者就是7然后是3最后是2\
+      data=data:match(\"%<ServiceData%>(.-)%<%/ServiceData%>\")\
+      if data then\
+        return data\
+      else\
+        ShowError(\"ServiceDataException\",\"无法找到服务数据\")\
+        return nil\
+      end\
+    end\
+  else\
+    ShowError(\"SettingException\",\"设置参数缺失\",\"ServiceUrl\")\
+  end\
+  return nil\
+end\
+\
+--错误提示\
+function ShowError(errorType,message,notes,jdpuk)\
+  --QQ32552732\
+  if DebugMode then\
+    对话框()--QQ32552732\
+    .设置标题(ErrorType[errorType] or \"未知错误\")\
+    .设置消息(message..((notes and \"\\n附: \"..notes)or \"\")..\"\\n\\n您可以通过QQ联系作者获取帮助： 3 2 5 5 2 7 3 2\")\
+    .显示()\
+  end\
+end\
+\
+--服务数据解析\
+function ServiceDataParse(data,jdpuk)\
+  --QQ32552732\
+  return unserialize(data)\
+end\
+\
+--是否已有NoticeID\
+function hasNoticeID(noticeid)\
+  --QQ32552732\
+  local noticeidlist=getData(DataListName,\"NoticeID\")\
+  if noticeidlist then noticeidlist=unserialize(noticeidlist) end\
+  if isEmpty(noticeid) or (not noticeidlist) or (not noticeidlist[noticeid]) then\
+    return false\
+  else\
+    return true\
+  end\
+end\
+\
+--新增NoticeID\
+function addNoticeID(noticeid)\
+  --QQ32552732\
+  local newnoticeidlist\
+  if noticeidlist then\
+    newnoticeidlist=noticeidlist\
+  else\
+    newnoticeidlist={}\
+  end\
+  newnoticeidlist[noticeid]=os.time()\
+  putData(DataListName,\"NoticeID\",serialize(newnoticeidlist))\
+end\
+\
+--公告解析\
+function NoticeParse(data,jdpuk)\
+  --QQ32552732\
+  if data then\
+    local sdata=ServiceDataParse(data)\
+    if sdata then\
+      local notice=sdata[\"Notice\"]\
+      if notice then\
+        local noticeid=tostring(notice[\"ID\"])\
+        local title=tostring(notice[\"Title\"])\
+        local message=tostring(notice[\"Message\"])\
+        local button=tostring(notice[\"Button\"])\
+        local openuri=tostring(notice[\"OpenUri\"])\
+        local button1=tostring(notice[\"Button1\"])\
+        local openuri1=tostring(notice[\"OpenUri1\"])\
+        local button2=tostring(notice[\"Button2\"])\
+        local openuri2=tostring(notice[\"OpenUri2\"])\
+        local msgusehtml\
+        if (not isEmpty(tostring(notice[\"MessageUseHtml\"]))) and isTrue(tostring(notice[\"MessageUseHtml\"])) or \"32\"==tostring(552732) then\
+          msgusehtml=true\
+        else\
+          msgusehtml=false\
+        end\
+        message=ReplaceVariable(message,GetVariables(),msgusehtml)\
+        if msgusehtml then\
+          message=Html.fromHtml(message)\
+        end\
+        return {[\"NoticeID\"]=noticeid,[\"Title\"]=title,[\"Message\"]=message,[\"Button\"]=button,[\"OpenUri\"]=openuri,[\"Button1\"]=button1,[\"OpenUri1\"]=openuri1,[\"Button2\"]=button2,[\"OpenUri2\"]=openuri2,[\"MyQQ\"]=32552732}\
+      end\
+    else\
+      ShowError(\"ServiceDataException\",\"服务数据无法解析\",data)\
+    end\
+  else\
+    ShowError(\"ServiceDataException\",\"无服务数据\")\
+  end\
+end\
+\
+--展示公告\
+function ShowNotice(data,jdpuk)\
+  --QQ32552732\
+  if data then\
+    local noticeid=data[\"NoticeID\"]\
+    local title=data[\"Title\"]\
+    local message=data[\"Message\"]\
+    local button=data[\"Button\"]\
+    local openuri=data[\"OpenUri\"]\
+    local button1=data[\"Button1\"]\
+    local openuri1=data[\"OpenUri1\"]\
+    local button2=data[\"Button2\"]\
+    local openuri2=data[\"OpenUri2\"]\
+    if title or message then\
+      if isEmpty(noticeid) or not hasNoticeID(noticeid) then\
+        if not isEmpty(noticeid) then\
+          addNoticeID(noticeid)\
+        end\
+        local notidlg=对话框()--QQ32552732\
+        if not isEmpty(title) then notidlg.设置标题(title)end\
+        if not isEmpty(message) then notidlg.setMessage(message)end\
+        if not isEmpty(button) then notidlg.设置积极按钮(button,function(MzI1NTI3MzI)\
+            if not isEmpty(openuri) then this.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse(openuri)))end\
+          end)end\
+        if not isEmpty(button1) then notidlg.设置消极按钮(button1,function(MzI1NTI3MzI)\
+            if not isEmpty(openuri1) then this.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse(openuri1)))end\
+          end)end\
+        if not isEmpty(button2) then notidlg.设置中立按钮(button2,function(MzI1NTI3MzI)\
+            if not isEmpty(openuri2) then this.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse(openuri2)))end\
+          end)end\
+        notidlg.显示()\
+      end\
+    end\
+  end\
+end\
+\
+--更新解析\
+function UpdateParse(data,jdpuk)\
+  --QQ32552732\
+  if data then\
+    local sdata=ServiceDataParse(data)\
+    if sdata then\
+      local update=sdata[\"Update\"]\
+      if update then\
+        local newest=tostring(update[\"Version\"])\
+        if not isEmpty(newest) then\
+          local usevername\
+          if (not isEmpty(tostring(update[\"UseVersionName\"]))) and isTrue(tostring(update[\"UseVersionName\"])) or 32+55+27+32==3+2+5+5+2+7+3+2 then\
+            usevername=true\
+          else\
+            usevername=false\
+          end\
+          local version=((usevername and VersionName)or VersionCode)\
+          local dlurl=tostring(update[\"DownloadUrl\"])\
+          if (usevername and not(version==newest)) or ((not usevername) and tonumber(version)<tonumber(newest)) and 32552732>325+527+32 then\
+            local force\
+            if (not isEmpty(tostring(update[\"Force\"]))) and isTrue(tostring(update[\"Force\"])) then\
+              force=true\
+            else\
+              force=false\
+            end\
+            if isEmpty(tostring(update[\"DownloadUrl\"])) then\
+              ShowError(\"ServiceDataException\",\"服务数据缺失\",\"DownloadUrl\")\
+              dlurl=\"\"\
+            end\
+            if (not isEmpty(tostring(update[\"ChangeLogUseHtml\"]))) and isTrue(tostring(update[\"ChangeLogUseHtml\"])) then\
+              chlogusehtml=true\
+            else\
+              chlogusehtml=false\
+            end\
+            local chglog=(tostring(update[\"ChangeLog\"]))\
+            chglog=((not isEmpty(chglog) and ReplaceVariable(chglog,GetVariables(),chlogusehtml))or \"\")\
+            local defupmsg=version..\" 更新至 \"..newest\
+            local upmsg\
+            upmsg=((not isEmpty(chglog) and chglog)or((chlogusehtml and toHtml(defupmsg))or defupmsg))--3:2:5:5:2:7:3:2\
+            if chlogusehtml then upmsg=Html.fromHtml(upmsg) end\
+            return {[\"Update\"]=true,[\"Version\"]=newest,[\"Message\"]=upmsg,[\"DownloadUrl\"]=dlurl,[\"Force\"]=force,[\"MyQQ\"]=32552732}\
+          else\
+            return {[\"Update\"]=false,[\"MyQQ\"]=32552732}\
+          end\
+        else\
+          ShowError(\"ServiceDataException\",\"服务数据缺失\",\"Version\")\
+        end\
+      end\
+    else\
+      ShowError(\"ServiceDataException\",\"服务数据无法解析\",data)\
+    end\
+  else\
+    ShowError(\"ServiceDataException\",\"无服务数据\")\
+  end\
+end\
+\
+--展示更新\
+function ShowUpdate(data,jdpuk)\
+  --QQ32552732\
+  if data and data[\"Update\"] then\
+    local upmsg=data[\"Message\"]\
+    local dlurl=data[\"DownloadUrl\"]\
+    local force=data[\"Force\"]\
+    if force then\
+      activity.setContentView(loadlayout({LinearLayout,orientation=\"vertical\",layout_width=\"fill\",layout_height=\"fill\",{TextView,layout_width=\"fill\",layout_height=\"fill\",gravity=\"center\",textSize=\"20sp\",text=\"请更新后使用\"}}))\
+    end\
+    if dlurl then\
+      对话框()--QQ32552732\
+      .设置标题(\"版本更新\")\
+      .setMessage(upmsg)\
+      .设置积极按钮(\"立即更新\",function(MzI1NTI3MzI)\
+        弹出消息(\"请确认下载更新并安装\")\
+        this.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse(dlurl)))\
+        (not force or ShowUpdate(data))\
+      end)\
+      .设置消极按钮(\"复制链接\",function(MzI1NTI3MzI)\
+        复制文本(dlurl)\
+        弹出消息(\"已复制更新包下载链接\")\
+        (not force or ShowUpdate(data))\
+      end)\
+      .设置中立按钮(\"取消更新\",function(MzI1NTI3MzI)\
+        if force then\
+          activity.finish()\
+          local Process = import \"android.os.Process\"\
+          Process.killProcess(Process.myPid())\
+        end\
+      end)\
+      .setOnDismissListener({onDismiss=function()\
+          return (not force or ShowUpdate(data))\
+          --return (not force or activity.finish())\
+        end})\
+      .setCancelable(false)\
+      .显示()\
+    else\
+      ShowError(\"ServiceDataException\",\"服务数据缺失\",\"dlurl\")\
+    end\
+  end\
+end\
+\
+--简单的启动时检查数据示例\
+function checkServiceData(force)\
+  --QQ32552732\
+  if force then\
+    wfsdpd=ProgressDialog(this)--QQ32552732\
+    .setTitle(AppLabel)\
+    .setMessage(\"正在检查服务数据，请稍候...\")\
+    .setButton(((force and \"退出\")or \"忽略\"),{onClick=function(MzI1NTI3MzI)\
+        return (not force or 退出程序())\
+      end})\
+    .setCancelable(not force)\
+    .show()\
+  end\
+  GetServiceData(function(data)\
+    if wfsdpd then wfsdpd.dismiss() end\
+    if data then\
+      ShowUpdate(UpdateParse(data))\
+      ShowNotice(NoticeParse(data))\
+    else\
+      对话框()--QQ32552732\
+      .设置标题(AppLabel)\
+      .设置消息(\"网络连接失败，请检查网络设置\")\
+      .设置积极按钮(\"重试\",function()\
+        checkServiceData(force)\
+        return true\
+      end)\
+      .设置消极按钮(((force and \"退出\")or \"取消\"),function()\
+        return (not force or 退出程序())\
+      end)\
+      .setCancelable(not force)\
+      .显示()\
+    end\
+  end)\
+end\
+\
+--更简单的检查更新示例\
+function checkUpdate()\
+  --QQ32552732\
+  GetServiceData(function(data)\
+    if data then\
+      local update=UpdateParse(data)\
+      if update[\"Update\"] then\
+        ShowUpdate(update)\
+        弹出消息(\"发现新版本: \"..update[\"Version\"])\
+      else\
+        弹出消息(\"已是最新版本\")\
+      end\
+    else\
+      弹出消息(\"更新检查失败\")\
+    end\
+  end)\
+end\
+\
+--启动时检查服务数据(包括更新及公告)\
+--checkServiceData(true)\
+\
+--检查更新(请在进入后通过其它事件调用以实现类似检查更新菜单项的效果)\
+--checkUpdate()\
+\
+\
+" ;
+      ["网页加载完毕"]	= "" ;
+      ["网页即将加载"]	= "" ;
+      } ;
+  ["switch"]	= {
+      ["横屏"]	= false ;
+      ["支持滑动页面"]	= false ;
+      ["显示状态栏"]	= true ;
+      ["启用启动图"]	= false ;
+      } ;
+  ["web"]	= {
+      ["支持打开外部应用"]	= true ;
+      ["启用长按菜单"]	= true ;
+      ["启用进度条"]	= true ;
+      ["浏览器用户标识"]	= "默认" ;
+      ["惰性加载"]	= true ;
+      ["网页沉浸"]	= false ;
+      } ;
+  ["fltBtn"]	= {
+      ["图标"]	= "" ;
+      ["显示"]	= true ;
+      ["点击事件"]	= "--悬浮按钮点击时执行的事件\
+返回网页顶部()" ;
+      } ;
+  ["tab_bar"]	= {
+      ["items"]	= {
+          [4]	= {
+              ["url"]	= "https://fgo.wiki/index.php?title=%E9%A6%96%E9%A1%B5&mobileaction=toggle_view_mobile" ;
+              ["name"]	= "对比栏3" ;
+              } ;
+          [1]	= {
+              ["url"]	= "https://fgo.wiki/index.php?title=%E9%A6%96%E9%A1%B5&mobileaction=toggle_view_mobile" ;
+              ["name"]	= "主页" ;
+              } ;
+          [2]	= {
+              ["url"]	= "https://fgo.wiki/index.php?title=%E9%A6%96%E9%A1%B5&mobileaction=toggle_view_mobile" ;
+              ["name"]	= "对比栏1" ;
+              } ;
+          [3]	= {
+              ["url"]	= "https://fgo.wiki/index.php?title=%E9%A6%96%E9%A1%B5&mobileaction=toggle_view_mobile" ;
+              ["name"]	= "对比栏2" ;
+              } ;
+          } ;
+      } ;
+  ["view_attribute"]	= {
+      ["搜索栏圆角弧度"]	= "2dp" ;
+      ["顶栏高度"]	= "55dp" ;
+      ["侧滑栏宽度"]	= "215dp" ;
+      ["顶栏标题"]	= "" ;
+      ["顶栏阴影强度"]	= "2dp" ;
+      ["搜索栏阴影强度"]	= "2dp" ;
+      ["标签栏高度"]	= "40dp" ;
+      ["标签栏滑动条高度"]	= "3dp" ;
+      } ;
+  ["colors"]	= {
+      ["状态栏"]	= "#ffffffff" ;
+      ["搜索栏提示文字"]	= "#80000000" ;
+      ["标签栏滑动条"]	= "#ff4583be" ;
+      ["顶栏"]	= "#ffffffff" ;
+      ["侧滑栏列表图标"]	= "#ff4583be" ;
+      ["标签栏文本"]	= "#ff000000" ;
+      ["侧滑栏列表文字"]	= "#ff333333" ;
+      ["顶栏部件触摸"]	= "#33ffffff" ;
+      ["导航栏"]	= "#ff2c2e43" ;
+      ["标签栏项目触摸"]	= "#33000000" ;
+      ["进度条"]	= "#ff4583be" ;
+      ["搜索栏背景"]	= "#ffffffff" ;
+      ["悬浮按钮"]	= "#da4583be" ;
+      ["侧滑栏背景"]	= "#ffffffff" ;
+      ["搜索栏部件"]	= "#ff4583be" ;
+      ["悬浮按钮图标"]	= "#ffffffff" ;
+      ["搜索栏部件触摸"]	= "#44000000" ;
+      ["顶栏部件"]	= "#ffffffff" ;
+      } ;
+  ["toolbar"]	= {
+      ["输入栏模式"]	= true ;
+      ["icon_btns"]	= {
+          [1]	= {
+              ["icon"]	= "refresh" ;
+              ["onClick"]	= "对话框()\
+.设置标题(\"Mooncell\")\
+.设置消息(\"您确定要刷新页面吗？\\n这将强制清除所有缓存（结束自身进程）！\")\
+.设置积极按钮(\"确定\",function()\
+  os.execute(\"pm clear \"..activity.getPackageName())\
+end)\
+.设置消极按钮(\"取消\")\
+.显示()" ;
+              } ;
+          [2]	= {
+              ["icon"]	= "weather_night" ;
+              ["onClick"]	= "夜间模式.切换()" ;
+              } ;
+          [3]	= {
+              ["icon"]	= "content_copy" ;
+              ["onClick"]	= "复制文本(webView.getUrl())" ;
+              } ;
+          } ;
+      ["搜索框提示"]	= "搜索" ;
+      ["启用搜索功能"]	= true ;
+      ["搜索URL"]	= "https://fgo.wiki/index.php?search=%s" ;
+      ["menus"]	= {
+          [1]	= {
+              ["name"]	= "登录" ;
+              ["onClick"]	= "加载网页(\"https://fgo.wiki/index.php?title=%E7%89%B9%E6%AE%8A:%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95&returnto=%E9%A6%96%E9%A1%B5&returntoquery=mobileaction%3Dtoggle_view_mobile%26welcome%3Dyes\")" ;
+              } ;
+          [2]	= {
+              ["name"]	= "退出" ;
+              ["onClick"]	= "os.execute(\"pm clear \"..activity.getPackageName())" ;
+              } ;
+          [3]	= {
+              ["name"]	= "条款" ;
+              ["onClick"]	= "加载网页(\"https://fgo.wiki/w/Mooncell:条款\")" ;
+              } ;
+          [4]	= {
+              ["name"]	= "免责声明" ;
+              ["onClick"]	= "加载网页(\"https://fgo.wiki/w/Mooncell:免责声明\")" ;
+              } ;
+          [5]	= {
+              ["name"]	= "关于Mooncell" ;
+              ["onClick"]	= "加载网页(\"https://fgo.wiki/w/Mooncell:关于\")" ;
+              } ;
+          } ;
+      } ;
+  } ;
