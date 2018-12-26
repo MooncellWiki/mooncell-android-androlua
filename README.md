@@ -1,5 +1,5 @@
 # Mooncell-Client
-Mooncell-中文Wiki攻略站   安卓lua客户端
+Mooncell安卓lua客户端
 <br>
 dev版本为2.3.0
 <br>
