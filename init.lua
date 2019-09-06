@@ -1,3 +1,5 @@
+template="tool"
+appname="Mooncell"
 user_permission={
   [1]	= "ACCESS_COARSE_LOCATION" ;
   [2]	= "ACCESS_FINE_LOCATION" ;
@@ -6,8 +8,6 @@ user_permission={
   [5]	= "INTERNET" ;
   [6]	= "WRITE_EXTERNAL_STORAGE" ;
   } ;
-appcode="57"
 packagename="wiki.mooncell.app"
-template="tool"
-appver="2.3.0"
-appname="Mooncell"
+appver="2.3.1"
+appcode="58"
